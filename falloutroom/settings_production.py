@@ -4,27 +4,19 @@ import os
 # Production settings
 DEBUG = False
 
-# Render deployment configuration
 ALLOWED_HOSTS = [
     'fallout-room-backend.onrender.com',
     'localhost',
     '127.0.0.1',
-    '0.0.0.0',  # Required for Render
 ]
 
-# Database connection pooling for stability
-DATABASES['default']['CONN_MAX_AGE'] = 60
-
-# Database for production
+# Database for production (Render auto-configures this)
+import dj_database_url
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DATABASE_NAME'),
-        'USER': os.environ.get('DATABASE_USER'),
-        'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
-        'HOST': os.environ.get('DATABASE_HOST'),
-        'PORT': os.environ.get('DATABASE_PORT'),
-    }
+    'default': dj_database_url.config(
+        default='sqlite:///db.sqlite3',
+        conn_max_age=600
+    )
 }
 
 # Static files
@@ -33,9 +25,9 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # CORS for your frontend
 CORS_ALLOWED_ORIGINS = [
-    "https://your-username.github.io",  # Replace with your GitHub Pages URL
+    "https://harjin2005.github.io",
 ]
 
-# Security
-SECURE_SSL_REDIRECT = True
+# Security settings
+SECURE_SSL_REDIRECT = False  # Render handles SSL
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
