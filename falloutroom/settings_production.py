@@ -8,7 +8,7 @@ ALLOWED_HOSTS = [
     'fallout-room-backend.onrender.com',
     'localhost',
     '127.0.0.1',
-    '0.0.0.0',
+    '0.0.0.0',  # Critical for Render
 ]
 
 # Database configuration
@@ -29,8 +29,11 @@ CORS_ALLOWED_ORIGINS = [
 ]
 CORS_ALLOW_ALL_ORIGINS = True
 
-# Security settings
+# Critical for Render deployment
 SECURE_SSL_REDIRECT = False
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
-# Middleware (inherit from base settings, no need to redefine)
+# Ensure proper host binding for Render
+import socket
+hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
+INTERNAL_IPS = [ip[: ip.rfind(".")] + ".1" for ip in ips] + ["127.0.0.1", "10.0.2.2"]
