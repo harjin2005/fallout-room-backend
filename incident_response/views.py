@@ -8,15 +8,25 @@ from datetime import datetime
 from django.http import JsonResponse
 from django.core.management import call_command  
 
-def setup_db(request):
-    """One-time database setup"""
+def simple_setup(request):
+    """Simple database setup with HTML response"""
     try:
-        call_command('migrate', '--run-syncdb')
-        call_command('makemigrations', 'incident_response')
-        call_command('migrate')
-        return JsonResponse({"status": "Database setup complete - tables created"})
+        # Run migrations
+        call_command('makemigrations', 'incident_response', verbosity=2)
+        call_command('migrate', verbosity=2)
+        
+        return HttpResponse("""
+        <h1>✅ Database Setup Complete!</h1>
+        <p>Tables have been created successfully.</p>
+        <p><a href="/admin/">Access Admin Panel</a></p>
+        <p><a href="/api/incidents/">Test Incidents API</a></p>
+        """)
+        
     except Exception as e:
-        return JsonResponse({"error": f"Setup failed: {str(e)}"})
+        return HttpResponse(f"""
+        <h1>❌ Setup Failed</h1>
+        <p>Error: {str(e)}</p>
+        """)
 
 
 
