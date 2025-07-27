@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🛡️ FALLOUT ROOM - AI-Powered Crisis Response Command Center</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-weight: 500;
+        }
+        
+        .mono { 
+            font-family: 'Courier New', monospace; 
+            font-weight: 600;
+        }
+        
+        /* UPDATED: Animated Purple Background */
+        body {
+            background: linear-gradient(135deg, #000000 0%, #1a0d26 25%, #2d1b3d 50%, #1a0d26 75%, #000000 100%);
+            background-size: 400% 400%;
+            animation: subtleShift 15s ease infinite;
+            min-height: 100vh;
+            color: #e2e8f0 !important;
+        }
+        
+        @keyframes subtleShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        /* IMPROVED: Softer Contrast Cards */
+        .command-card {
+            background: rgba(0, 0, 0, 0.85) !important;
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(147, 51, 234, 0.4) !important;
+            border-radius: 12px;
+            box-shadow: 
+                0 4px 15px rgba(147, 51, 234, 0.2), 
+                inset 0 1px 0 rgba(147, 51, 234, 0.1);
+            color: #e2e8f0 !important;
+        }
+        
+        .alert-card {
+            background: rgba(0, 0, 0, 0.9) !important;
+            border: 1px solid rgba(239, 68, 68, 0.5) !important;
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.15);
+            color: #e2e8f0 !important;
+        }
+        
+        .success-card {
+            background: rgba(0, 0, 0, 0.9) !important;
+            border: 1px solid rgba(147, 51, 234, 0.5) !important;
+            box-shadow: 0 0 20px rgba(147, 51, 234, 0.15);
+            color: #e2e8f0 !important;
+        }
+        
+        /* UPDATED: Purple AI Styling */
+        .ai-generated {
+            background: linear-gradient(45deg, rgba(0, 0, 0, 0.95), rgba(147, 51, 234, 0.1)) !important;
+            border: 2px solid #9333ea !important;
+            position: relative;
+            color: #e2e8f0 !important;
+        }
+        
+        .ai-generated::before {
+            content: "🤖 OPENROUTER AI";
+            position: absolute;
+            top: -12px;
+            right: 15px;
+            background: linear-gradient(45deg, #9333ea, #7c3aed);
+            color: #ffffff;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-family: monospace;
+            font-weight: bold;
+            box-shadow: 0 3px 8px rgba(147, 51, 234, 0.4);
+            z-index: 10;
+        }
+        
+        /* SOFTENED: Purple Terminal Effects */
+        .terminal-text {
+            color: #c084fc !important;
+            text-shadow: 0 0 8px rgba(192, 132, 252, 0.6);
+            font-weight: bold !important;
+        }
+        
+        .warning-text {
+            color: #fbbf24 !important;
+            text-shadow: 0 0 6px rgba(251, 191, 36, 0.5);
+            font-weight: bold !important;
+        }
+        
+        .danger-text {
+            color: #f87171 !important;
+            text-shadow: 0 0 6px rgba(248, 113, 113, 0.5);
+            font-weight: bold !important;
+        }
+        
+        .info-text {
+            color: #a78bfa !important;
+            text-shadow: 0 0 8px rgba(167, 139, 250, 0.6);
+            font-weight: bold !important;
+        }
+        
+        /* SOFTENED: Text Colors */
+        .text-light {
+            color: #e2e8f0 !important;
+        }
+        
+        .text-custom-gray {
+            color: #cbd5e1 !important;
+            font-weight: 500 !important;
+        }
+        
+        /* UPDATED: Purple Status Indicators */
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+        }
+        
+        .status-active {
+            background: #c084fc;
+            box-shadow: 0 0 12px #c084fc;
+            animation: pulse-dot 2s infinite;
+        }
+        
+        .status-warning {
+            background: #fbbf24;
+            box-shadow: 0 0 10px #fbbf24;
+            animation: pulse-dot 2s infinite;
+        }
+        
+        .status-critical {
+            background: #f87171;
+            box-shadow: 0 0 12px #f87171;
+            animation: pulse-dot 1s infinite;
+        }
+        
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.1); }
+        }
+        
+        /* SOFTENED: Hover Effects */
+        .hover-glow {
+            transition: all 0.3s ease;
+        }
+        
+        .hover-glow:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(147, 51, 234, 0.2);
+            border-color: rgba(147, 51, 234, 0.6) !important;
+        }
+        
+        /* UPDATED: Purple Button Styles */
+        .command-btn {
+            background: linear-gradient(45deg, #000000, #1a0d26) !important;
+            border: 2px solid #9333ea !important;
+            box-shadow: 0 4px 12px rgba(147, 51, 234, 0.3);
+            transition: all 0.3s ease;
+            color: #c084fc !important;
+            font-weight: bold !important;
+        }
+        
+        .command-btn:hover {
+            background: linear-gradient(45deg, #9333ea, #7c3aed) !important;
+            box-shadow: 0 6px 20px rgba(147, 51, 234, 0.5);
+            transform: translateY(-2px);
+            color: #ffffff !important;
+        }
+        
+        /* UPDATED: Horizontal Stats Layout */
+        .stats-horizontal {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: rgba(0, 0, 0, 0.9) !important;
+            border: 1px solid rgba(147, 51, 234, 0.4) !important;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            flex: 1;
+            min-width: 250px;
+            color: #e2e8f0 !important;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(147, 51, 234, 0.25);
+            border-color: rgba(147, 51, 234, 0.6) !important;
+        }
+        
+        /* ENHANCED: Typography */
+        .military-header {
+            font-weight: 900 !important;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #e2e8f0 !important;
+        }
+        
+        /* UPDATED: Purple Loading Animation */
+        .scanning::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(147, 51, 234, 0.3), transparent);
+            animation: scan 2s infinite;
+        }
+        
+        @keyframes scan {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        
+        /* UPDATED: Purple Step Counter */
+        .step-counter {
+            background: linear-gradient(45deg, #000000, #1a0d26) !important;
+            width: 45px;
+            height: 45px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #c084fc !important;
+            border: 2px solid #9333ea !important;
+            box-shadow: 0 0 15px rgba(147, 51, 234, 0.3);
+        }
+        
+        .step-complete {
+            background: linear-gradient(45deg, #9333ea, #7c3aed) !important;
+            border-color: #9333ea !important;
+            color: #ffffff !important;
+            box-shadow: 0 0 20px rgba(147, 51, 234, 0.5);
+        }
+        
+        /* UPDATED: Framework Dots */
+        .framework-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 10px;
+        }
+        
+        /* UPDATED: Top Status Bar */
+        .top-status-bar {
+            background: rgba(0, 0, 0, 0.95) !important;
+            border-bottom: 2px solid #9333ea !important;
+            box-shadow: 0 2px 10px rgba(147, 51, 234, 0.2);
+        }
+        
+        /* UPDATED: Badge Styles */
+        .badge {
+            font-weight: bold !important;
+            font-size: 11px !important;
+            padding: 6px 12px !important;
+        }
+        
+        .bg-success {
+            background-color: #9333ea !important;
+            color: #ffffff !important;
+        }
+        
+        .bg-warning {
+            background-color: #fbbf24 !important;
+            color: #000000 !important;
+        }
+        
+        .bg-danger {
+            background-color: #f87171 !important;
+            color: #ffffff !important;
+        }
+        
+        /* UPDATED: Border Colors */
+        .border-secondary {
+            border-color: #64748b !important;
+        }
+        
+        .border-success {
+            border-color: #9333ea !important;
+        }
+        
+        .border-danger {
+            border-color: #f87171 !important;
+        }
+        
+        .border-info {
+            border-color: #a78bfa !important;
+        }
+        
+        .border-warning {
+            border-color: #fbbf24 !important;
+        }
+        
+        /* RESPONSIVE: Better Mobile Layout */
+        @media (max-width: 768px) {
+            .stats-horizontal {
+                flex-direction: column;
+            }
+            
+            .stat-card {
+                min-width: 100%;
+            }
+            
+            .military-header {
+                font-size: 1.5rem !important;
+            }
+        }
+        
+        /* REMOVE: Old grid pattern */
+        .grid-pattern {
+            background-image: none;
+        }
+</style>
+
+</head>
+<body class="grid-pattern">
+    
+    <!-- ENHANCED: Top Status Bar -->
+    <div class="top-status-bar py-3">
+        <div class="container-fluid">
+            <div class="row align-items-center justify-content-between">
+                <div class="col-md-8">
+                    <div class="d-flex align-items-center flex-wrap">
+                        <div class="d-flex align-items-center me-4 mb-1">
+                            <span class="status-dot status-active"></span>
+                            <span class="terminal-text mono">OPENROUTER AI ONLINE</span>
+                        </div>
+                        <div class="d-flex align-items-center me-4 mb-1">
+                            <i class="fas fa-robot terminal-text me-2"></i>
+                            <span class="text-custom-gray">GHOSTDRAFT ACTIVE</span>
+                        </div>
+                        <div class="d-flex align-items-center mb-1">
+                            <i class="fas fa-satellite info-text me-2"></i>
+                            <span class="text-custom-gray">SECURE LINK ACTIVE</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 text-end">
+                    <div class="d-flex align-items-center justify-content-end flex-wrap">
+                        <span class="text-custom-gray mono me-3 mb-1" id="current-time">LOADING...</span>
+                        <div class="d-flex align-items-center mb-1">
+                            <span class="status-dot status-warning"></span>
+                            <span class="warning-text mono">INCIDENT ACTIVE</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container-fluid py-4">
+        
+        <!-- ENHANCED: Command Header with Horizontal Layout -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="command-card p-4 hover-glow">
+                    <div class="row align-items-center">
+                        <div class="col-lg-8 col-md-7">
+                            <div class="d-flex align-items-center mb-3">
+                                <i class="fas fa-radiation warning-text fs-1 me-4"></i>
+                                <div>
+                                    <h1 class="military-header info-text mb-0" style="font-size: 3rem;">
+                                        FALLOUT ROOM
+                                    </h1>
+                                    <p class="text-custom-gray fs-5 mb-0">
+                                        <i class="fas fa-robot me-2"></i>
+                                        OPENROUTER AI-POWERED CRISIS RESPONSE COMMAND CENTER
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center flex-wrap">
+                                <div class="d-flex align-items-center me-4 mb-1">
+                                    <span class="status-dot status-active"></span>
+                                    <span class="terminal-text mono">OPENROUTER AGENTS ONLINE</span>
+                                </div>
+                                <div class="d-flex align-items-center me-4 mb-1">
+                                    <i class="fas fa-clock info-text me-2"></i>
+                                    <span class="text-custom-gray mono">MISSION TIME: <span id="mission-time">00:00:00</span></span>
+                                </div>
+                                <div class="d-flex align-items-center mb-1">
+                                    <i class="fas fa-users info-text me-2"></i>
+                                    <span class="text-custom-gray mono">RESPONSE TEAM ACTIVE</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-5 text-end">
+                            <button onclick="loadIncidents()" class="btn command-btn px-4 py-3 fs-6 mono fw-bold mb-2">
+                                <i class="fas fa-sync-alt me-2"></i>
+                                <span id="refresh-text">REFRESH AI ANALYSIS</span>
+                            </button>
+                            <p class="text-custom-gray small mono">LAST AI UPDATE: <span id="last-update">INITIALIZING...</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading Section -->
+        <div id="loading" class="d-none row mb-4">
+            <div class="col-12">
+                <div class="command-card text-center p-5 position-relative scanning">
+                    <div class="spinner-border terminal-text mb-3" style="width: 4rem; height: 4rem;" role="status"></div>
+                    <p class="fs-5 mono terminal-text">
+                        <i class="fas fa-robot me-2"></i>
+                        OPENROUTER AI ANALYZING INCIDENT DATA...
+                    </p>
+                    <p class="text-custom-gray small mono">GhostDraft agents generating response protocols</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- FIXED: Horizontal Tactical Statistics -->
+        <div id="stats-section" style="display: none;">
+            <div class="stats-horizontal">
+                <div class="stat-card alert-card p-4 hover-glow">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <p class="text-custom-gray small mono text-uppercase mb-1">Active Threats</p>
+                            <p class="fs-2 fw-bold danger-text mono mb-0" id="active-incidents">0</p>
+                        </div>
+                        <i class="fas fa-exclamation-triangle danger-text" style="font-size: 2.5rem;"></i>
+                    </div>
+                    <div class="mt-3">
+                        <span class="status-dot status-critical"></span>
+                        <span class="danger-text small mono">CRITICAL PRIORITY</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card command-card p-4 hover-glow">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <p class="text-custom-gray small mono text-uppercase mb-1">Response Actions</p>
+                            <p class="fs-2 fw-bold info-text mono mb-0" id="total-actions">0</p>
+                        </div>
+                        <i class="fas fa-tasks info-text" style="font-size: 2.5rem;"></i>
+                    </div>
+                    <div class="mt-3">
+                        <span class="status-dot status-active"></span>
+                        <span class="info-text small mono">OPERATIONAL</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card success-card p-4 hover-glow">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <p class="text-custom-gray small mono text-uppercase mb-1">AI Protocols Active</p>
+                            <p class="fs-2 fw-bold terminal-text mono mb-0" id="ai-deliverables">0</p>
+                        </div>
+                        <i class="fas fa-robot terminal-text" style="font-size: 2.5rem;"></i>
+                    </div>
+                    <div class="mt-3">
+                        <span class="status-dot status-active"></span>
+                        <span class="terminal-text small mono">OPENROUTER READY</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card command-card p-4 hover-glow">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <p class="text-custom-gray small mono text-uppercase mb-1">Mission Status</p>
+                            <p class="fs-2 fw-bold warning-text mono mb-0" id="completion-rate">0%</p>
+                        </div>
+                        <i class="fas fa-chart-line warning-text" style="font-size: 2.5rem;"></i>
+                    </div>
+                    <div class="mt-3">
+                        <span class="status-dot status-warning"></span>
+                        <span class="warning-text small mono">IN PROGRESS</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Tactical Display -->
+        <div class="row">
+            <div class="col-12">
+                <div id="incident-container"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const API_BASE = 'http://127.0.0.1:8000/api';
+        let missionStartTime = new Date();
+        
+        // Update current time and mission timer
+        function updateTime() {
+            const now = new Date();
+            document.getElementById('current-time').textContent = 
+                now.toISOString().slice(0, 19).replace('T', ' ') + ' UTC';
+            
+            // Mission timer
+            const elapsed = Math.floor((now - missionStartTime) / 1000);
+            const hours = Math.floor(elapsed / 3600).toString().padStart(2, '0');
+            const minutes = Math.floor((elapsed % 3600) / 60).toString().padStart(2, '0');
+            const seconds = (elapsed % 60).toString().padStart(2, '0');
+            document.getElementById('mission-time').textContent = `${hours}:${minutes}:${seconds}`;
+        }
+        
+        setInterval(updateTime, 1000);
+        updateTime();
+        
+        async function loadIncidents() {
+            const refreshBtn = document.getElementById('refresh-text');
+            const loading = document.getElementById('loading');
+            const container = document.getElementById('incident-container');
+            const statsSection = document.getElementById('stats-section');
+            
+            // Show loading with AI styling
+            refreshBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>OPENROUTER ANALYZING...';
+            loading.classList.remove('d-none');
+            container.innerHTML = '';
+            statsSection.style.display = 'none';
+            
+            try {
+                const response = await fetch(`${API_BASE}/incidents/`);
+                const incidents = await response.json();
+                
+                document.getElementById('last-update').textContent = new Date().toLocaleTimeString();
+                
+                if (incidents.length === 0) {
+                    container.innerHTML = `
+                        <div class="command-card text-center p-5">
+                            <i class="fas fa-shield-check terminal-text mb-4" style="font-size: 4rem;"></i>
+                            <h3 class="military-header mb-3">NO ACTIVE THREATS DETECTED</h3>
+                            <p class="text-custom-gray mono">OpenRouter AI systems nominal. Standing by for incidents.</p>
+                            <div class="mt-3">
+                                <span class="status-dot status-active"></span>
+                                <span class="terminal-text mono">AI READY STATE</span>
+                            </div>
+                        </div>`;
+                    return;
+                }
+                
+                displayIncidents(incidents);
+                updateStats(incidents);
+                statsSection.style.display = 'block';
+                
+            } catch (error) {
+                container.innerHTML = `
+                    <div class="alert-card text-center p-5">
+                        <i class="fas fa-robot danger-text mb-4" style="font-size: 4rem;"></i>
+                        <h3 class="danger-text mb-3 military-header">OPENROUTER AI SYSTEM OFFLINE</h3>
+                        <p class="text-light mono">Unable to establish connection to OpenRouter AI database</p>
+                        <p class="text-custom-gray small mono mt-2">Verify Django server status at http://127.0.0.1:8000</p>
+                        <button onclick="loadIncidents()" class="btn btn-danger px-4 py-2 mt-3 mono fw-bold">
+                            <i class="fas fa-redo me-2"></i>RETRY AI CONNECTION
+                        </button>
+                    </div>`;
+                console.error('Connection Error:', error);
+            } finally {
+                loading.classList.add('d-none');
+                refreshBtn.innerHTML = '<i class="fas fa-sync-alt me-2"></i>REFRESH AI ANALYSIS';
+            }
+        }
+        
+        function updateStats(incidents) {
+            const totalActions = incidents.reduce((sum, inc) => sum + (inc.actions ? inc.actions.length : 0), 0);
+            const aiDeliverables = incidents.reduce((sum, inc) => 
+                sum + (inc.actions ? inc.actions.filter(action => action.ghostdraft).length : 0), 0);
+            
+            document.getElementById('active-incidents').textContent = incidents.length;
+            document.getElementById('total-actions').textContent = totalActions;
+            document.getElementById('ai-deliverables').textContent = aiDeliverables;
+            document.getElementById('completion-rate').textContent = '85%';
+        }
+        
+        function displayIncidents(incidents) {
+            let html = '';
+            
+            incidents.forEach((incident, index) => {
+                const threatLevel = index === 0 ? 'CRITICAL' : 'HIGH';
+                const threatClass = threatLevel === 'CRITICAL' ? 'alert-card' : 'command-card';
+                const threatIcon = threatLevel === 'CRITICAL' ? 'fas fa-radiation' : 'fas fa-exclamation-triangle';
+                const threatColor = threatLevel === 'CRITICAL' ? 'danger-text' : 'warning-text';
+                
+                html += `
+                <div class="${threatClass} hover-glow mb-4">
+                    <div class="p-4">
+                        <!-- Incident Header -->
+                        <div class="border-bottom border-secondary pb-4 mb-4">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="d-flex align-items-center mb-3 flex-wrap">
+                                        <div class="d-flex align-items-center px-3 py-2 bg-dark border border-danger rounded me-3 mb-2">
+                                            <span class="status-dot ${threatLevel === 'CRITICAL' ? 'status-critical' : 'status-warning'}"></span>
+                                            <span class="${threatColor} fw-bold mono small">${threatLevel} THREAT</span>
+                                        </div>
+                                        <div class="text-custom-gray mono small mb-2">
+                                            <i class="fas fa-calendar-alt me-2"></i>
+                                            INITIATED: ${new Date(incident.timestamp).toLocaleString()}
+                                        </div>
+                                    </div>
+                                    <h2 class="military-header ${threatColor} mb-3" style="font-size: 2.5rem;">
+                                        <i class="${threatIcon} me-3"></i>${incident.title}
+                                    </h2>
+                                    <p class="text-light fs-6 lh-base">${incident.description}</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- GUARD Action Statement -->
+                        <div class="bg-dark bg-opacity-50 p-3 rounded mb-4 border-start border-info border-4">
+                            <h4 class="info-text small mono text-uppercase mb-2">
+                                <i class="fas fa-shield-alt me-2"></i>GUARD Control Objective
+                            </h4>
+                            <p class="text-light fst-italic mb-0">
+                                "${incident.control_objective || 'Control provides reasonable assurance that third-party data breaches are detected, contained, and responded to in a manner that minimizes customer impact, meets regulatory obligations, and preserves stakeholder trust while strengthening vendor risk management practices.'}"
+                            </p>
+                        </div>
+                        
+                        <!-- Control Framework Citations -->
+                        <div class="bg-dark bg-opacity-75 p-3 rounded mb-4">
+                            <h4 class="terminal-text small mono text-uppercase mb-3">
+                                <i class="fas fa-certificate me-2"></i>Control Framework Mapping
+                            </h4>
+                            <div class="row text-sm">
+                                <div class="col-md-6 mb-2">
+                                    <div class="d-flex align-items-center">
+                                        <span class="framework-dot bg-info me-2"></span>
+                                        <span class="text-light">ISO 27001:2022 Clause A.5.23 — Information security for cloud services</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <div class="d-flex align-items-center">
+                                        <span class="framework-dot" style="background-color: #00ff88;"></span>
+                                        <span class="text-light">NIST CSF ID.SC — Supply Chain Risk Management</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <div class="d-flex align-items-center">
+                                        <span class="framework-dot" style="background-color: #ffff00;"></span>
+                                        <span class="text-light">SCF #TPM-03 — Third-Party Management</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <div class="d-flex align-items-center">
+                                        <span class="framework-dot" style="background-color: #a855f7;"></span>
+                                        <span class="text-light">GDPR Article 33 — Breach notification within 72 hours</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Response Protocol -->
+                        <div>
+                            <h3 class="military-header mb-4">
+                                <i class="fas fa-robot me-3 terminal-text"></i>
+                                OPENROUTER AI-POWERED RESPONSE PROTOCOL
+                                <span class="fs-6 fw-normal text-custom-gray mono">[${incident.actions ? incident.actions.length : 0} ACTIONS]</span>
+                            </h3>
+                            
+                            <div class="row">
+                                ${displayActions(incident.actions)}
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+            });
+            
+            document.getElementById('incident-container').innerHTML = html;
+        }
+        
+        function displayActions(actions) {
+            if (!actions || actions.length === 0) {
+                return '<div class="col-12"><div class="command-card text-center p-4"><i class="fas fa-info-circle info-text me-2"></i><span class="mono">NO ACTIONS DEFINED</span></div></div>';
+            }
+            
+            let html = '';
+            
+            actions.sort((a, b) => a.step - b.step).forEach(action => {
+                const isAI = action.ghostdraft;
+                const cardClass = isAI ? 'command-card ai-generated' : 'command-card';
+                const borderClass = isAI ? 'border-success border-2' : 'border-secondary';
+                
+                html += `
+                <div class="col-lg-6 mb-3">
+                    <div class="${cardClass} hover-glow ${borderClass}">
+                        <div class="p-3">
+                            <!-- Action Header -->
+                            <div class="d-flex align-items-start justify-content-between mb-3">
+                                <div class="d-flex align-items-center">
+                                    <div class="step-counter me-3">${action.step}</div>
+                                    <div>
+                                        <h4 class="text-light military-header mb-1">${action.title}</h4>
+                                        <p class="info-text mono small mb-0">
+                                            <i class="fas fa-user-tie me-2"></i>OPERATOR: ${action.operator}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="d-flex flex-column align-items-end">
+                                    ${isAI ? '<span class="badge bg-success small mono mb-1"><i class="fas fa-robot me-1"></i>OPENROUTER AI</span>' : ''}
+                                    <span class="badge bg-warning small mono"><i class="fas fa-clock me-1"></i>ACTIVE</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Mission Brief -->
+                            <div class="bg-dark bg-opacity-50 p-3 rounded mb-3">
+                                <h5 class="text-custom-gray small mono text-uppercase mb-2">Mission Brief:</h5>
+                                <p class="text-light mb-0">${action.description}</p>
+                            </div>
+                            
+                            <!-- OpenRouter AI GhostDraft Deliverables -->
+                            ${displayDeliverables(action.deliverables)}
+                        </div>
+                    </div>
+                </div>`;
+            });
+            
+            return html;
+        }
+        
+        function displayDeliverables(deliverables) {
+            if (!deliverables || deliverables.length === 0) {
+                return '';
+            }
+            
+            let html = '<div class="border-top border-secondary pt-3"><h5 class="text-custom-gray small mono text-uppercase mb-3"><i class="fas fa-robot me-2 terminal-text"></i>OpenRouter AI GhostDraft Intelligence Reports</h5>';
+            
+            deliverables.forEach((deliverable, index) => {
+                const isAIGenerated = deliverable.content && (deliverable.content.includes('🤖 OPENROUTER AI-GENERATED:') || deliverable.content.includes('🤖 AI-GENERATED:'));
+                const voiceIcon = deliverable.voice_eligible ? '<i class="fas fa-microphone terminal-text me-2" title="Voice Synthesis Available"></i>' : '';
+                const formatIcon = getFormatIcon(deliverable.deliverable_format);
+                const aiClass = isAIGenerated ? 'ai-generated border-success' : 'border-secondary';
+                
+                html += `
+                <div class="bg-dark bg-opacity-30 border ${aiClass} p-3 mb-3 rounded">
+                    <div class="d-flex align-items-start justify-content-between mb-3">
+                        <div class="d-flex align-items-center">
+                            ${formatIcon}
+                            <span class="fw-bold small mono info-text">[${deliverable.deliverable_format.toUpperCase()}]</span>
+                            ${voiceIcon}
+                            ${isAIGenerated ? '<span class="badge bg-success ms-2 small"><i class="fas fa-robot me-1"></i>OPENROUTER</span>' : ''}
+                        </div>
+                        <div class="small text-custom-gray mono">
+                            EXPORT: ${deliverable.export_options || 'Standard'}
+                        </div>
+                    </div>
+                    
+                    <!-- Expandable Draft Content -->
+                    <div class="mb-2">
+                        <button onclick="toggleDeliverable('${deliverable.id || index}')" class="btn btn-sm btn-outline-success mono">
+                            <i class="fas fa-eye me-1"></i>VIEW OPENROUTER AI CONTENT
+                        </button>
+                    </div>
+                    
+                    <div id="deliverable-${deliverable.id || index}" class="bg-dark p-3 rounded border-start border-success border-4 d-none">
+                        <div class="text-light small lh-base mono" style="white-space: pre-line;">
+                            ${deliverable.content || 'AI-generated content will appear here...'}
+                        </div>
+                        
+                        ${deliverable.voice_eligible ? `
+                        <div class="mt-3 p-3 bg-success bg-opacity-20 border border-success rounded">
+                            <div class="d-flex align-items-center mb-2">
+                                <i class="fas fa-volume-up terminal-text me-2"></i>
+                                <span class="text-success small mono text-uppercase">OpenRouter AI Voice Synthesis Ready</span>
+                            </div>
+                            <p class="text-light small mb-0">OpenRouter AI-generated voice transcript available for executive briefing.</p>
+                        </div>
+                        ` : ''}
+                    </div>
+                </div>`;
+            });
+            
+            html += '</div>';
+            return html;
+        }
+        
+        function getFormatIcon(format) {
+            const icons = {
+                'markdown': '<i class="fas fa-markdown info-text me-2"></i>',
+                'text': '<i class="fas fa-file-alt text-custom-gray me-2"></i>',
+                'html': '<i class="fas fa-code warning-text me-2"></i>',
+                'pdf': '<i class="fas fa-file-pdf danger-text me-2"></i>'
+            };
+            return icons[format ? format.toLowerCase() : 'text'] || '<i class="fas fa-file text-custom-gray me-2"></i>';
+        }
+        
+        // Toggle deliverable content visibility
+        function toggleDeliverable(index) {
+            const element = document.getElementById(`deliverable-${index}`);
+            if (element.classList.contains('d-none')) {
+                element.classList.remove('d-none');
+            } else {
+                element.classList.add('d-none');
+            }
+        }
+        
+        // Initialize OpenRouter AI tactical display
+        document.addEventListener('DOMContentLoaded', loadIncidents);
+    </script>
+</body>
+</html>
