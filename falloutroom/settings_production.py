@@ -4,11 +4,16 @@ import os
 # Production settings
 DEBUG = False
 
+# Render deployment configuration
 ALLOWED_HOSTS = [
-    'your-app-name.onrender.com',  # Replace with your Render URL
+    'fallout-room-backend.onrender.com',
     'localhost',
     '127.0.0.1',
+    '0.0.0.0',  # Required for Render
 ]
+
+# Database connection pooling for stability
+DATABASES['default']['CONN_MAX_AGE'] = 60
 
 # Database for production
 DATABASES = {
