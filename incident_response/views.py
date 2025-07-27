@@ -5,8 +5,8 @@ from .models import Incident, Action, Deliverable
 from .serializers import IncidentSerializer, ActionSerializer, DeliverableSerializer
 import random
 from datetime import datetime
-from django.http import JsonResponse
-from django.core.management import call_command  
+from django.http import JsonResponse, HttpResponse  # Add HttpResponse here
+from django.core.management import call_command
 
 def simple_setup(request):
     """Simple database setup with HTML response"""
@@ -20,13 +20,32 @@ def simple_setup(request):
         <p>Tables have been created successfully.</p>
         <p><a href="/admin/">Access Admin Panel</a></p>
         <p><a href="/api/incidents/">Test Incidents API</a></p>
+        <style>
+            body { font-family: Arial; margin: 40px; }
+            h1 { color: green; }
+            a { color: blue; text-decoration: none; }
+        </style>
         """)
         
     except Exception as e:
         return HttpResponse(f"""
         <h1>❌ Setup Failed</h1>
         <p>Error: {str(e)}</p>
+        <style>
+            body { font-family: Arial; margin: 40px; }
+            h1 { color: red; }
+        </style>
         """)
+
+def setup_db(request):
+    """JSON response database setup"""
+    try:
+        call_command('migrate', '--run-syncdb')
+        call_command('makemigrations', 'incident_response')
+        call_command('migrate')
+        return JsonResponse({"status": "Database setup complete - tables created"})
+    except Exception as e:
+        return JsonResponse({"error": f"Setup failed: {str(e)}"})
 
 
 
