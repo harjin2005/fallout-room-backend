@@ -5,6 +5,20 @@ from .models import Incident, Action, Deliverable
 from .serializers import IncidentSerializer, ActionSerializer, DeliverableSerializer
 import random
 from datetime import datetime
+from django.http import JsonResponse
+from django.core.management import call_command  
+
+def setup_db(request):
+    """One-time database setup"""
+    try:
+        call_command('migrate', '--run-syncdb')
+        call_command('makemigrations', 'incident_response')
+        call_command('migrate')
+        return JsonResponse({"status": "Database setup complete - tables created"})
+    except Exception as e:
+        return JsonResponse({"error": f"Setup failed: {str(e)}"})
+
+
 
 try:
     from openai import OpenAI

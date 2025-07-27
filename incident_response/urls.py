@@ -10,4 +10,6 @@ router.register('deliverables', views.DeliverableViewSet)
 urlpatterns = [
     path('', include(router.urls)),
     path('generate-ai/', views.generate_ai_content, name='generate-ai'),
+    path('setup-db/', views.setup_db, name='setup-db'),  # Add this line
 ]
+

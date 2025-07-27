@@ -1,8 +1,8 @@
 services:
   - type: web
-    name: fallout-room-api
+    name: fallout-room-backend
     env: python
-    buildCommand: "pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate"
+    buildCommand: "pip install -r requirements.txt && python manage.py makemigrations incident_response && python manage.py migrate --run-syncdb && python manage.py collectstatic --noinput"
     startCommand: "gunicorn falloutroom.wsgi:application"
     envVars:
       - key: DJANGO_SETTINGS_MODULE
